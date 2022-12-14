@@ -21,13 +21,7 @@
                            href="{% url 'index' %}">Главная</a>
                 </li>
                 {% if request.user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#"
-                       id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Работа с почтой
-                    </a>
-                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#"
                        id="navbarDropdownMenuLink" role="button"
@@ -39,6 +33,9 @@
                         <li><a class="dropdown-item"
                                href="{% url 'password_change' %}">Изменить
                             пароль</a></li>
+                        <li><a class="dropdown-item"
+                               href="{% url 'create_profile' %}">Изменить
+                            профиль</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

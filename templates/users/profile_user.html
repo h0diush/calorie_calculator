@@ -1,0 +1,11 @@
+{% extends '../base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form action="{% url 'create_profile' %}" method="POST" class="form-signin">
+    {% csrf_token %}
+    {{ form|crispy }}
+      <div class="container-fluid mt-3">
+        <input type="submit" value="Войти" class="btn btn-success">
+      </div>
+  </form>
+{% endblock %}

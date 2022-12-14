@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.users.models.choices import DAYS, Gender, MONTHS, WorkoutChoice, \
     YEARS
 from apps.users.utils import calorie_calculation, get_persons_age
+from apps.users.validators import validate_height_weight
 
 
 class Profile(models.Model):
@@ -33,11 +34,13 @@ class Profile(models.Model):
 
     height = models.CharField(
         _("Рост"), max_length=3,
+        validators=[validate_height_weight],
         help_text="Необходимо указывать в см"
     )
 
     weight = models.CharField(
         _("Вес"), max_length=3,
+        validators=[validate_height_weight],
         help_text="Необходимо указывать в кг"
     )
 
@@ -62,7 +65,7 @@ class Profile(models.Model):
         """Возвращает суточная норма калорий"""
         return calorie_calculation(
             self.gender, int(self.weight),
-            int(self.height), 24,
+            int(self.height), self.get_age,
             self.workout
         )
 

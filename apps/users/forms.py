@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import PasswordResetForm as ResetForm
 
-from .models import User
+from .models import Profile, User
+from .models.choices import Gender, DAYS, MONTHS, YEARS, WorkoutChoice
+from .validators import validate_height_weight
 
 
 class RegisterForm(UserCreationForm):
@@ -47,7 +49,7 @@ class RegisterForm(UserCreationForm):
 
 class PasswordResetForm(ResetForm):
     """Форма валидации электронной почты,
-     существует ли пользователь в бд, для восстановления пароля"""
+     существует ли пользователь в бд. Для восстановления пароля"""
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -55,3 +57,47 @@ class PasswordResetForm(ResetForm):
             raise forms.ValidationError(
                 f'Почта {email} не зарегистрирована на сайте')
         return email
+
+
+class ProfileUserForm(forms.ModelForm):
+    """Форма для заполнения профиля пользователя"""
+
+    gender = forms.ChoiceField(
+        label='Пол:', widget=forms.Select(),
+        choices=Gender.choices
+    )
+    brith_day = forms.ChoiceField(
+        label='День:', widget=forms.Select(),
+        choices=[day for day in DAYS]
+    )
+
+    brith_month = forms.ChoiceField(
+        label='Месяц:', widget=forms.Select(),
+        choices=[month for month in MONTHS]
+    )
+
+    brith_year = forms.ChoiceField(
+        label='Год:', widget=forms.Select(),
+        choices=[year for year in YEARS]
+    )
+
+    height = forms.CharField(
+        label='Рост:', max_length=3, validators=[validate_height_weight],
+        help_text="Рост должен быть в см",
+        widget=forms.TextInput()
+    )
+
+    weight = forms.CharField(
+        label='Вес:', max_length=3, validators=[validate_height_weight],
+        help_text="Вес должен быть в кг",
+        widget=forms.TextInput()
+    )
+
+    workout = forms.ChoiceField(
+        label='Занятия спортом:', widget=forms.Select(),
+        choices=WorkoutChoice.choices
+    )
+
+    class Meta:
+        model = Profile
+        exclude = ('user',)

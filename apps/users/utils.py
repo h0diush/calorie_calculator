@@ -1,7 +1,7 @@
 import datetime as dt
 
 
-def get_persons_age(day, month, year):
+def get_persons_age(day, month, year) -> int:
     """Утилита, которая считает возраст пользователя"""
 
     current_year = dt.datetime.now().year

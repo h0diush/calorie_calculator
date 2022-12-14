@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout, views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import FormView, DetailView
 from django.views.generic.base import TemplateView
 from registration.backends.default.views import RegistrationView
 
-from .forms import PasswordResetForm, RegisterForm
+from .forms import PasswordResetForm, ProfileUserForm, RegisterForm
 
 User = get_user_model()
 
@@ -73,3 +75,20 @@ class LoginUserView(LoginView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Вход'
         return context
+
+
+class UserProfileCreateView(LoginRequiredMixin, FormView):
+    """Профиль пользователя"""
+
+    template_name = "users/profile_user.html"
+    form_class = ProfileUserForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+class UserProfile(LoginRequiredMixin, DetailView):
+    pass

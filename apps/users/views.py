@@ -2,14 +2,15 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, logout, views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.generic import FormView, DetailView
+from django.views.generic import DetailView, FormView, UpdateView
 from django.views.generic.base import TemplateView
 from registration.backends.default.views import RegistrationView
 
 from .forms import PasswordResetForm, ProfileUserForm, RegisterForm
+from .models import Profile
 
 User = get_user_model()
 
@@ -80,7 +81,12 @@ class LoginUserView(LoginView):
 class UserProfileCreateView(LoginRequiredMixin, FormView):
     """Профиль пользователя"""
 
-    template_name = "users/profile_user.html"
+    def dispatch(self, request, *args, **kwargs):
+        if Profile.objects.filter(user=self.request.user):
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = "users/profile_user_create.html"
     form_class = ProfileUserForm
     success_url = '/'
 
@@ -90,5 +96,44 @@ class UserProfileCreateView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-class UserProfile(LoginRequiredMixin, DetailView):
-    pass
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
+    """ Профиль пользователя"""
+    # TODO dispatch  404 если пользователь анонимный
+    context_object_name = 'user'
+    template_name = 'users/user_profile_detail.html'
+    model = User
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.filter(user=self.request.user).first()
+        if profile:
+            context["profile"] = profile
+        else:
+            context["profile"] = None
+        return context
+
+
+class UpdateUserProfile(LoginRequiredMixin, UpdateView):
+    """Обновление профиля пользователя"""
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     profile_user = Profile.objects.filter(user=request.user).first()
+    #     if request.user != profile_user.user:
+    #         return HttpResponseForbidden()
+    #     return super().dispatch(request, *args, **kwargs)
+
+    model = Profile
+    context_object_name = 'profile'
+    form_class = ProfileUserForm
+    template_name = 'users/profile_user_update.html'
+    pk_url_kwarg = 'pk'
+    # slug_field = 'username'
+    # slug_url_kwarg = 'username'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)

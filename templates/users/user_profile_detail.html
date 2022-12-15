@@ -1,0 +1,71 @@
+{% extends '../base.html' %}
+{% block content %}
+    <p class="h4">Добро пожаловать, {{ user.username }}</p>
+    {% if profile.get_calories_per_day %}
+        <p class="h4 mt-3">Суточная норма
+            калорий {{ profile.get_calories_per_day }}</p>
+
+    {% endif %}
+    <p class="h5 mt-5">Ваши персональные данные:</p>
+    <table class="table table-sm">
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Электронная почта</td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Имя пользователя</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Имя</td>
+            <td>
+                {% if user.first_name %}
+                    {{ user.first_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>Фамилия</td>
+            <td>
+                {% if user.last_name %}
+                    {{ user.last_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% if profile %}
+            <tr>
+                <th scope="row">5</th>
+                <td>Возраст</td>
+                <td>{{ profile.get_age }}</td>
+            </tr>
+            <tr>
+                <th scope="row">6</th>
+                <td>Рост</td>
+                <td>{{ profile.height }} см</td>
+            </tr>
+            <tr>
+                <th scope="row">7</th>
+                <td>Вес</td>
+                <td>{{ profile.weight }} кг</td>
+            </tr>
+            <tr>
+                <th scope="row">8</th>
+                <td>Занятие спортом</td>
+                <td>{{ profile.get_workout_display }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <a href="{% url 'update_profile' profile.pk %}" class="">
+        <button class="btn btn-success">Изменить данные</button>
+    </a>
+{% endblock %}

@@ -1,9 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import PasswordResetForm as ResetForm
+from django.contrib.auth.forms import PasswordResetForm as ResetForm, \
+    UserCreationForm
 
 from .models import Profile, User
-from .models.choices import Gender, DAYS, MONTHS, YEARS, WorkoutChoice
+from .models.choices import DAYS, Gender, MONTHS, WorkoutChoice, YEARS
 from .validators import validate_height_weight
 
 

@@ -14,6 +14,7 @@ class Profile(models.Model):
         'users.User',
         on_delete=models.CASCADE,
         verbose_name=_("Пользователь"),
+        related_name='profiles'
     )
     gender = models.CharField(
         max_length=15, verbose_name=_("Пол"),

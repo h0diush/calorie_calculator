@@ -5,7 +5,8 @@ from registration.backends.default.views import (ActivationView,
 
 from .views import (ActivationEmailComplete, index, LoginUserView, logout_user,
                     PasswordChange, PasswordResetView, RegistrationUserView,
-                    UserProfileCreateView)
+                    UpdateUserProfile, UserProfileCreateView,
+                    UserProfileDetailView)
 
 urlpatterns = [
     path('', index, name='index'),
@@ -15,7 +16,12 @@ urlpatterns = [
         LoginUserView.as_view(template_name='users/login.html'),
         name='login'
     ),
-    path('create_profile/', UserProfileCreateView.as_view(), name='create_profile'),
+    path('create_profile/', UserProfileCreateView.as_view(),
+         name='create_profile'),
+    path('profile/<str:username>/', UserProfileDetailView.as_view(),
+         name='profile'),
+    path('profile/<int:pk>/update/', UpdateUserProfile.as_view(),
+         name='update_profile'),
     path('logout/', logout_user, name='logout'),
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password-reset/', PasswordResetView.as_view(),

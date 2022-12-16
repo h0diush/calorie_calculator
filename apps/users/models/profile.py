@@ -46,7 +46,7 @@ class Profile(models.Model):
     )
 
     workout = models.CharField(
-        max_length=55, verbose_name=_("Пол"),
+        max_length=55, verbose_name=_("Занятия спортом"),
         choices=WorkoutChoice.choices,
         default=WorkoutChoice.PASSIVE_LIFESTYLE
     )
@@ -69,6 +69,9 @@ class Profile(models.Model):
             int(self.height), self.get_age,
             self.workout
         )
+
+    def get_brith_day(self):
+        return f'{self.brith_day}.{self.brith_month}.{self.brith_year}'
 
     class Meta:
         verbose_name = 'Профиль пользователя'

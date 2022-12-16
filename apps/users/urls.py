@@ -3,13 +3,19 @@ from django.urls import path
 from registration.backends.default.views import (ActivationView,
                                                  ResendActivationView)
 
-from .views import (ActivationEmailComplete, index, LoginUserView, logout_user,
+from .views import (ActivationEmailComplete, LoginUserView, logout_user,
                     PasswordChange, PasswordResetView, RegistrationUserView,
+<<<<<<< HEAD
                     UpdateUserProfile, UserProfileCreateView,
                     UserProfileDetailView)
+=======
+                    UserProfileCreateView, UserProfileUpdate, UserProfileView)
+>>>>>>> ac1dad3 (Filling in and changing the user profile . Home page display)
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('profile/<str:username>/', UserProfileView.as_view(), name='profile'),
+    path('profile/<int:pk>/update/', UserProfileUpdate.as_view(),
+         name='profile_update'),
     path('register/', RegistrationUserView.as_view(), name='register'),
     path(
         'login/',
@@ -18,10 +24,13 @@ urlpatterns = [
     ),
     path('create_profile/', UserProfileCreateView.as_view(),
          name='create_profile'),
+<<<<<<< HEAD
     path('profile/<str:username>/', UserProfileDetailView.as_view(),
          name='profile'),
     path('profile/<int:pk>/update/', UpdateUserProfile.as_view(),
          name='update_profile'),
+=======
+>>>>>>> ac1dad3 (Filling in and changing the user profile . Home page display)
     path('logout/', logout_user, name='logout'),
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password-reset/', PasswordResetView.as_view(),

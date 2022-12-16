@@ -22,7 +22,6 @@
                 </li>
                 {% if request.user.is_authenticated %}
 
-<<<<<<< HEAD
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#"
                            id="navbarDropdownMenuLink" role="button"
@@ -53,37 +52,8 @@
                            href="#">{{ request.user.username }}</a>
                     </li>
                     <!--!!!!!! убрать перед деплоем -->
-=======
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#"
-                       id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Мой профиль
-                    </a>
-                    <ul class="dropdown-menu"
-                        aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item"
-                               href="{% url 'password_change' %}">Изменить
-                            пароль</a></li>
-                        {% if not request.user.profiles.all %}
-                        <li><a class="dropdown-item"
-                               href="{% url 'create_profile' %}">Заполнить
-                            профиль</a></li>
-                            {% endif %}
-                    <li><a class="dropdown-item"
-                               href="{{ request.user.get_absolute_url }}">Смотреть
-                            профиль</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-                </li>
-                <!-- убрать перед деплоем!!!!!! -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#">{{request.user.username}}</a>
-                </li>
+
                 <!--!!!!!! убрать перед деплоем -->
->>>>>>> ac1dad3 (Filling in and changing the user profile . Home page display)
                 {% else %}
 
                     <li class="nav-item">

@@ -1,11 +1,7 @@
 {% extends '../base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<<<<<<< HEAD
-<form action="{% url 'update_profile' profile.pk %}" method="POST" class="form-signin">
-=======
 <form action="{% url 'profile_update' profile.pk %}" method="POST" class="form-signin">
->>>>>>> ac1dad3 (Filling in and changing the user profile . Home page display)
     {% csrf_token %}
     {{ form|crispy }}
       <div class="container-fluid mt-3">

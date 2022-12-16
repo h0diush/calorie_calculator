@@ -1,7 +1,7 @@
 from django.views.generic import ListView
 
 from .models import CaloriesModel
-
+# f
 
 class CalorieCounterView(ListView):
     context_object_name = 'calories'

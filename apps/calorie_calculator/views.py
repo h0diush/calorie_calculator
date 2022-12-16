@@ -1,6 +1,8 @@
 from django.views.generic import ListView
 
 from .models import CaloriesModel
+
+
 # f
 
 class CalorieCounterView(ListView):

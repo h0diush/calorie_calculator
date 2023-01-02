@@ -34,4 +34,4 @@ def calorie_calculation(gender, weight, height, age, workout):
         bmr *= 1.725
     if workout == 'ATHLETES':
         bmr *= 1.9
-    return f'{round(bmr, 2)}'
+    return f'{int(bmr)}'

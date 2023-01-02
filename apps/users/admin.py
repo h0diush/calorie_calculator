@@ -16,7 +16,8 @@ class UserAdmin(BaseUserAdmin):
         (_("Авторизация"), {'fields': ('username', 'email', 'password')}),
         (_("Персональная информация"), {
             'fields': (
-                'first_name', 'last_name'
+                'first_name', 'last_name', 'calories_burned',
+                'remaining_calories',
             )}),
         (_("Разрешения"), {
             'fields': ('is_staff', 'is_active', 'is_superuser',)}),

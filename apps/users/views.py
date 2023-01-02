@@ -91,14 +91,6 @@ class UserProfileCreateView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-class UserProfileDetailView(LoginRequiredMixin, DetailView):
-    """ Профиль пользователя"""
-    # TODO dispatch  404 если пользователь анонимный
-    context_object_name = 'user'
-    template_name = 'users/user_profile_detail.html'
-    model = User
-
-
 class UserProfileView(LoginRequiredMixin, DetailView):
     """Отображение профиля пользователя"""
 
@@ -118,36 +110,17 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         return context
 
 
-# class UpdateUserProfile(LoginRequiredMixin, UpdateView):
-#     """Обновление профиля пользователя"""
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         profile_user = Profile.objects.filter(user=request.user).first()
-#         if request.user != profile_user.user:
-#             return HttpResponseForbidden()
-#         return super().dispatch(request, *args, **kwargs)
-#
-#     model = Profile
-#     context_object_name = 'profile'
-#     form_class = ProfileUserForm
-#     template_name = 'users/profile_user_update.html'
-#     pk_url_kwarg = 'pk'
-#     # slug_field = 'username'
-#     # slug_url_kwarg = 'username'
-#     success_url = '/'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         profile = Profile.objects.filter(user=self.request.user).first()
-#         if profile:
-#             context['profile'] = profile
-#         else:
-#             context['profile'] = None
-#         return context
-
-
 class UserProfileUpdate(UpdateView):
     """Обновление профиля пользователя"""
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_anonymous:
+            return HttpResponseForbidden()
+        profile_user = Profile.objects.filter(
+            user=request.user).first()
+        if request.user != profile_user.user:
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
 
     form_class = ProfileUserForm
     template_name = 'users/profile_user_update.html'
@@ -155,12 +128,10 @@ class UserProfileUpdate(UpdateView):
     model = Profile
     success_url = '/'
 
-    # pk_url_kwarg = 'pk'
-
-    # def get_queryset(self):
-    #     return Profile.objects.filter(user=self.request.user).first()
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
         return super().form_valid(form)
+
+# TODO Добавить функцию изменения, и удаления пользователя!!!!
+# TODO Добавить функцию удаления профиля!!!!

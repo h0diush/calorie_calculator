@@ -23,6 +23,10 @@ class User(AbstractUser):
         _("Имя"), max_length=25, null=True, blank=True
     )
     registration = models.DateTimeField('Регистрация', auto_now_add=True)
+    calories_burned = models.SmallIntegerField(_("Потраченные калории"),
+                                               default=0)
+    remaining_calories = models.SmallIntegerField(_("Остаточные калории"),
+                                                  default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

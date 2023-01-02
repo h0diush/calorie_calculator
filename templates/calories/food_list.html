@@ -2,30 +2,50 @@
 {% block title %} Главная {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <p class="h1">ГЛАВНАЯ</p>
+<p class="h1">ГЛАВНАЯ</p>
 {% if calories %}
-    <table class="table table-bordered">
-        <tbody>
-        <thead>
-        <tr>
-            <th scope="col">Еда</th>
-            <th scope="col">Калории</th>
-            <th scope="col">Дата и время</th>
-        </tr>
-        </thead>
-        {% for calorie in calories %}
-            <tr>
-                <td>{{ calorie.food }}</td>
-                <td>{{ calorie.qty_calories }}</td>
-                <td>{{ calorie.created }}</td>
-                <td><a href="#"><button class="btn btn-success">Изменить</button></a></td>
-                <td><a href="#"><button class="btn btn-danger">Удалить</button></a></td>
-            </tr>
-        {% endfor %}
+<table class="table table-bordered">
+    <tbody>
+    <thead>
+    <tr>
+        <th scope="col">Еда</th>
+        <th scope="col">Калории</th>
+        <th scope="col">Дата и время</th>
+        <th scope="col">Количество калорий</th>
+    </tr>
+    </thead>
+    {% for calorie in calories %}
+    <tr>
+        <td>{{ calorie.food }}</td>
+        <td>{{ calorie.qty_calories }}</td>
+        <td>{{ calorie.created }}</td>
+        <td>{{ request.user.remaining_calories }}</td>
+        <td><a href="#">
+            <button class="btn btn-success">Изменить</button>
+        </a></td>
+        <td><a href="{% url 'delete_calories' calorie.pk %}">
+            <form method="POST"
+                  action="{% url 'delete_calories' calorie.pk %}">
+                {% csrf_token %}<input class="btn btn-danger" type="submit"
+                                       value="DELETE">
+            </form>
+            <!--            <button class="btn btn-danger">Удалить</button>-->
+        </a></td>
+    </tr>
+    {% endfor %}
 
-        </tbody>
-    </table>
-    {% else %}
-    <p class="h3">Пожалуйста авторизуйтесь</p>
-    {% endif %}
+    </tbody>
+</table>
+{% else %}
+<p class="h3">У вас пока ничего нет</p>
+{% endif %}
+{% if request.user.is_authenticated  %}
+<p class="h2">Количество калорий: {{ profile.get_calories_per_day }}</p>
+<p class="h2">Остаток суточной нормы калорий: {{ request.user.remaining_calories }}</p>
+<a href="{% url 'crete_calories_food' %}">
+    <button class="btn btn-success">Добавить еду</button>
+</a>
+{% else %}
+<p class="h3">Пожалуйста авторизуйтесь</p>
+{% endif %}
 {% endblock %}

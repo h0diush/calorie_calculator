@@ -11,7 +11,6 @@
         <th scope="col">Еда</th>
         <th scope="col">Калории</th>
         <th scope="col">Дата и время</th>
-        <th scope="col">Количество калорий</th>
     </tr>
     </thead>
     {% for calorie in calories %}
@@ -19,15 +18,11 @@
         <td>{{ calorie.food }}</td>
         <td>{{ calorie.qty_calories }}</td>
         <td>{{ calorie.created }}</td>
-        <td>{{ request.user.remaining_calories }}</td>
-        <td><a href="#">
-            <button class="btn btn-success">Изменить</button>
-        </a></td>
         <td><a href="{% url 'delete_calories' calorie.pk %}">
             <form method="POST"
                   action="{% url 'delete_calories' calorie.pk %}">
                 {% csrf_token %}<input class="btn btn-danger" type="submit"
-                                       value="DELETE">
+                                       value="Удалить">
             </form>
             <!--            <button class="btn btn-danger">Удалить</button>-->
         </a></td>
@@ -40,11 +35,16 @@
 <p class="h3">У вас пока ничего нет</p>
 {% endif %}
 {% if request.user.is_authenticated  %}
+{% if profile %}
 <p class="h2">Количество калорий: {{ profile.get_calories_per_day }}</p>
 <p class="h2">Остаток суточной нормы калорий: {{ request.user.remaining_calories }}</p>
 <a href="{% url 'crete_calories_food' %}">
     <button class="btn btn-success">Добавить еду</button>
 </a>
+{% else %}
+<p class="h3">Заполните профиль <a href="{% url 'create_profile' %}">
+    <button class="btn btn-success">Заполнить</button></a></p>
+{% endif %}
 {% else %}
 <p class="h3">Пожалуйста авторизуйтесь</p>
 {% endif %}

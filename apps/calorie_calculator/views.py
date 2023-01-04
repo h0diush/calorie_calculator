@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, FormView, ListView, UpdateView
-
+from django.core.exceptions import ObjectDoesNotExist
 from .forms import CalorieCounterFormCreate
 from .models import CaloriesModel
 from .utils import calculation_of_remaining_calories
@@ -23,7 +23,10 @@ class CalorieCounterView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if not self.request.user.is_anonymous:
-            context["profile"] = Profile.objects.get(user=self.request.user)
+            try:
+                context["profile"] = Profile.objects.get(user=self.request.user)
+            except ObjectDoesNotExist:
+                return context
         return context
 
 
